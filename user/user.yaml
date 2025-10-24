@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: postgres
+data:
+  password: aGFzTDAxMjMK
+---
+apiVersion: dbs.plural.sh/v1alpha1
+kind: PostgresDatabase
+metadata:
+  name: plrl-testing
+  namespace: postgres
+spec:
+  credentialsRef:
+    name: cloud-pg-us-east-1-a
+  name: lukasz
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: testing-pg-user
+  namespace: postgres
+data:
+  password: aGFzTDAK
+---
+apiVersion: dbs.plural.sh/v1alpha1
+kind: PostgresUser
+metadata:
+  name: plrl-testing
+  namespace: postgres
+spec:
+  credentialsRef:
+    name: cloud-pg-us-east-1-a
+  databases:
+    - lukasz
+  name: lukasz
+  passwordSecretKeyRef:
+    key: password
+    name: testing-pg-user
